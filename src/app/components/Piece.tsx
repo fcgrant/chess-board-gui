@@ -5,7 +5,8 @@ interface Props {
     startingPosition: string,
     color: string,
     currentPosition: string,
-    value: number
+    value: number,
+    imagePath: string
 }
 export default function Piece(props: Props): JSX.Element {
 

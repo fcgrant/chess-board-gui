@@ -1,0 +1,18 @@
+interface BoardConfig {
+    whiteKing: string,
+    whiteQueen: string,
+    whiteRookLight: string,
+    whiteRookDark: string,
+    whiteKnightLight: string,
+    whiteKnightDark: string,
+    whiteBishopLight: string,
+    whiteBishopDark: string,
+    whitePawnA: string,
+    whitePawnB: string,
+    whitePawnC: string,
+    whitePawnD: string,
+    whitePawnE: string,
+    whitePawnF: string,
+    whitePawnG: string,
+    whitePawnH: string,
+}
