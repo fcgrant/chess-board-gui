@@ -1,12 +1,14 @@
 import React from "react"
 
 interface Props {
-    piece: JSX.Element,
+    piece?: JSX.Element,
     color: boolean
 }
-export default function Square(props: Props) {
+export default function Square(props: Props): JSX.Element {
 
+    const squareDimensions: number = 100;
     let squareColor: string;
+
     if (props.color) {
         squareColor = "SaddleBrown"
     } else {
@@ -15,8 +17,8 @@ export default function Square(props: Props) {
 
     const squareStyle = {
         "background-color": squareColor,
-        "height": "100px",
-        "width": "100px"
+        "height": squareDimensions,
+        "width": squareDimensions
     }
     return <div style={squareStyle}>{props.piece}</div>
 }

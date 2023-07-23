@@ -1,5 +1,4 @@
 import Square from './components/Square'
-import lightKnight from './common/configs/pieceConfig'
 
 export default function Home() {
 

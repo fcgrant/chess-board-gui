@@ -2,23 +2,19 @@ import React from "react";
 import Square from "./Square";
 import { List } from "postcss/lib/list";
 
-const rankLimit = 8;
-
 export default function Board(): JSX.Element {
 
 
+    const boardDimension: number = 8;
+    let piecesOnBoard: Array<JSX.Element>;
+    let board: Array<JSX.Element>;
+
+    for (let i = 0; i < boardDimension; i++) {
+        for (let j = 0; j < boardDimension; j++) {
+
+        }
+    }
     return (
 
     )
-}
-
-function generateRank(): JSX.Element[] {
-
-    let rankArray: JSX.Element[]
-
-    for (let square = 0; square < ; index++) {
-        const element = array[index];
-
-    }
-    return
 }
