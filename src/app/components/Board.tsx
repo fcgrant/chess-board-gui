@@ -4,22 +4,29 @@ import Square from "./Square";
 export default function Board(): JSX.Element {
 
     const boardDimension: number = 8;
-    let position, file: string = "";
-    let rank: number;
-    let board: Array<JSX.Element> = [];
+    let position: string = "";
+    let board: Array<Array<JSX.Element>> = [];
+    let rank: Array<JSX.Element> = [];
 
+    // Generate array of squares for the board and determine their positions
     for (let i = 0; i < boardDimension; i++) {
+        rank = [];
         for (let j = 0; j < boardDimension; j++) {
-            file = String.fromCharCode(97 + i)
-            rank = j + 1;
-            position = file + rank.toString();
-            board.push(<Square position={position} />)
+            position = String.fromCharCode(97 + i) + ((7 - j) + 1).toString();
+            rank.push(<Square position={position} />)
         }
+        board.push(rank);
     }
 
     return (
-        <div>
-            {board}
-        </div>
+        <>
+            {board.map(rank => {
+                return (
+                    <div style={{ display: "flex", direction: "ltr" }}>
+                        {rank}
+                    </div>
+                )
+            })}
+        </>
     )
 }

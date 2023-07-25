@@ -1,3 +1,3 @@
 import Piece from "../../components/Piece";
 
-const whiteKnight: JSX.Element;
+const whiteKnight: JSX.Element = null;
