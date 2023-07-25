@@ -9,7 +9,7 @@ interface Props {
 // squares
 function colourFromPosition(position: string): boolean {
 
-    const positionRegex = '/^[a-h][1-8]$/'
+    const positionRegex = "^[a-h][1-8]$"
     // Split position string into rank and file
     if (position.length !== 2) {
         throw "Position string must be of length 2"
@@ -52,7 +52,7 @@ export default function Square(props: Props): JSX.Element {
     }
 
     const squareStyle = {
-        "background-color": squareColor,
+        "background-color": squareColour,
         "height": squareDimensions,
         "width": squareDimensions
     }

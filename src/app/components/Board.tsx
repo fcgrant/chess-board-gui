@@ -15,6 +15,19 @@ export default function Board(): JSX.Element {
         }
     }
     return (
-
+        <>
+            <Square
+                position="a1"
+            />
+            <Square
+                position="a2"
+            />
+            <Square
+                position="a3"
+            />
+            <Square
+                position="a4"
+            />
+        </>
     )
 }
