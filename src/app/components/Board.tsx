@@ -1,5 +1,6 @@
 import React from "react";
 import Square from "./Square";
+import { whiteKnight } from "./Piece";
 
 export default function Board(): JSX.Element {
 
@@ -13,7 +14,7 @@ export default function Board(): JSX.Element {
         rank = [];
         for (let j = 0; j < boardDimension; j++) {
             position = String.fromCharCode(97 + i) + ((7 - j) + 1).toString();
-            rank.push(<Square position={position} />)
+            rank.push(<Square position={position} piece={whiteKnight} />)
         }
         board.push(rank);
     }
