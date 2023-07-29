@@ -1,3 +1,76 @@
-import Piece from "../../components/Piece";
+import { Pieces } from "@/app/components/Piece"
 
-const whiteKnight: JSX.Element = null;
+type PieceConfig = {
+    position: string,
+    piece: JSX.Element
+}
+
+type BoardConfig = {
+    WhiteQueen: PieceConfig,
+    WhiteKing: PieceConfig,
+    WhiteRookA: PieceConfig,
+    WhiteRookH: PieceConfig,
+    WhiteKnightB: PieceConfig,
+    WhiteKnightG: PieceConfig,
+    WhiteBishopC: PieceConfig,
+    WhiteBishopF: PieceConfig,
+    WhitePawnA: PieceConfig,
+    WhitePawnB: PieceConfig,
+    WhitePawnC: PieceConfig,
+    WhitePawnD: PieceConfig,
+    WhitePawnE: PieceConfig,
+    WhitePawnF: PieceConfig,
+    WhitePawnG: PieceConfig,
+    WhitePawnH: PieceConfig,
+    BlackQueen: PieceConfig,
+    BlackKing: PieceConfig,
+    BlackRookA: PieceConfig,
+    BlackRookH: PieceConfig,
+    BlackKnightB: PieceConfig,
+    BlackKnightG: PieceConfig,
+    BlackBishopC: PieceConfig,
+    BlackBishopF: PieceConfig,
+    BlackPawnA: PieceConfig,
+    BlackPawnB: PieceConfig,
+    BlackPawnC: PieceConfig,
+    BlackPawnD: PieceConfig,
+    BlackPawnE: PieceConfig,
+    BlackPawnF: PieceConfig,
+    BlackPawnG: PieceConfig,
+    BlackPawnH: PieceConfig
+}
+
+const StartingBoardConfig: BoardConfig = {
+    WhiteQueen: { position: "e1", piece: Pieces.WhiteKnight },
+    WhiteKing: PieceConfig,
+    WhiteRookA: PieceConfig,
+    WhiteRookH: PieceConfig,
+    WhiteKnightB: { position: "b1", piece: Pieces.WhiteKnight },
+    WhiteKnightG: PieceConfig,
+    WhiteBishopC: PieceConfig,
+    WhiteBishopF: PieceConfig,
+    WhitePawnA: PieceConfig,
+    WhitePawnB: PieceConfig,
+    WhitePawnC: PieceConfig,
+    WhitePawnD: PieceConfig,
+    WhitePawnE: PieceConfig,
+    WhitePawnF: PieceConfig,
+    WhitePawnG: PieceConfig,
+    WhitePawnH: PieceConfig,
+    BlackQueen: PieceConfig,
+    BlackKing: PieceConfig,
+    BlackRookA: PieceConfig,
+    BlackRookH: PieceConfig,
+    BlackKnightB: PieceConfig,
+    BlackKnightG: PieceConfig,
+    BlackBishopC: PieceConfig,
+    BlackBishopF: PieceConfig,
+    BlackPawnA: PieceConfig,
+    BlackPawnB: PieceConfig,
+    BlackPawnC: PieceConfig,
+    BlackPawnD: PieceConfig,
+    BlackPawnE: PieceConfig,
+    BlackPawnF: PieceConfig,
+    BlackPawnG: PieceConfig,
+    BlackPawnH: PieceConfig
+}
