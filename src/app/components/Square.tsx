@@ -52,7 +52,7 @@ export default function Square(props: Props): JSX.Element {
     }
 
     const squareStyle = {
-        "background-color": squareColour,
+        "backgroundColor": squareColour,
         "height": squareDimensions,
         "width": squareDimensions
     }
