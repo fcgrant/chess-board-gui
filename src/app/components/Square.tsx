@@ -25,19 +25,10 @@ function colourFromPosition(position: string): boolean {
 
     // A position is white/light if the file is odd and the rank is even, or the
     // file is even and the rank is odd
-    if (file % 2 !== 0) {
-        if (rank % 2 === 0) {
-            return false
-        } else {
-            return true
-        }
-    } else {
-        if (rank % 2 === 0) {
-            return true
-        } else {
-            return false
-        }
+    if ((file + rank) % 2 === 0) {
+        return true
     }
+    return false
 }
 
 export default function Square(props: Props): JSX.Element {
