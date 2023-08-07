@@ -9,7 +9,7 @@ export default function MoveInput() {
                 maxLength={2}
                 style={{ color: "black" }}
             />
-            <button type="submit" />
+            <button type="submit" onSubmit={ } />
 
         </>
     )
