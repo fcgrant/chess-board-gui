@@ -21,23 +21,16 @@ function colourFromPosition(position: string): boolean {
     // getting its unicode value and subtracting 96, since the unicode value of
     // a is 97
     const file = position[0].charCodeAt(0) - 96
-    const rank = (position[1] as unknown) as number
+    const rank = parseInt(position[1])
 
+    console.log("File = " + typeof (file) + "Rank = " + typeof (rank))
+    console.log(file + rank)
     // A position is white/light if the file is odd and the rank is even, or the
     // file is even and the rank is odd
-    if (file % 2 !== 0) {
-        if (rank % 2 === 0) {
-            return false
-        } else {
-            return true
-        }
-    } else {
-        if (rank % 2 === 0) {
-            return true
-        } else {
-            return false
-        }
+    if ((file + rank) % 2 === 0) {
+        return true
     }
+    return false
 }
 
 export default function Square(props: Props): JSX.Element {
@@ -56,5 +49,8 @@ export default function Square(props: Props): JSX.Element {
         "height": squareDimensions,
         "width": squareDimensions
     }
+
+    console.log(squareColour)
+
     return <div style={squareStyle}>{props.piece}</div>
 }

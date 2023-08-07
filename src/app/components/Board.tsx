@@ -19,6 +19,7 @@ export default function Board(): JSX.Element {
             // Generate a string for the given position based on the unicode value
             // of the file and the rank number
             position = String.fromCharCode(97 + file) + (rank).toString();
+            console.log(position)
             // Find if a piece occupies this square based on the board configuration
             boardRank.push(<Square position={position} piece={currentBoardConfig[position]} />)
         }
