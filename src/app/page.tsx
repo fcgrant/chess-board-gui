@@ -4,9 +4,6 @@ export default function Home() {
 
 
   return (
-    <>
-      <Board />
-      <MoveInput />
-    </>
+    <Board />
   )
 }
