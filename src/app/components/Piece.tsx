@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { DragEvent } from "react";
 type Props = {
     name: string,
     imagePath: string,
@@ -8,17 +9,27 @@ type Props = {
 function Piece(props: Props): JSX.Element {
     const pieceDimension: number = 100;
 
+    function handleOnDrag(e: DragEvent) {
+        e.dataTransfer.setData("name", props.name)
+    }
+
     return (
         <Image
             height={pieceDimension}
             width={pieceDimension}
             src={props.imagePath}
             alt={props.name}
+            draggable
+            onDragStart={(e) => handleOnDrag(e)}
         />
     )
 }
 
-export const Pieces = {
+type PieceList = {
+    [index: string]: JSX.Element
+}
+
+export const Pieces: PieceList = {
     WhiteKing: <Piece name="White King" imagePath="/white-king.svg" value={0} />,
     WhiteQueen: <Piece name="White Queen" imagePath="/white-queen.svg" value={9} />,
     WhiteRook: <Piece name="White Rook" imagePath="/white-rook.svg" value={5} />,

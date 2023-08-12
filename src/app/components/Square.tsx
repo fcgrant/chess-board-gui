@@ -1,7 +1,8 @@
-import React from "react"
+import React, { DragEvent, useState } from "react"
+import { StartingBoardConfig } from "../common/configs/boardConfig"
+import { Pieces } from "./Piece"
 
 interface Props {
-    piece?: JSX.Element,
     position: string
 }
 // Function to indicate the colour of the square given its position string. True
@@ -31,8 +32,23 @@ function colourFromPosition(position: string): boolean {
 }
 
 export default function Square(props: Props): JSX.Element {
+    let currentBoardConfig = StartingBoardConfig
+    const [occupyingPiece, setOccupyingPiece] = useState(currentBoardConfig[props.position])
     const squareDimensions: number = 100;
     let squareColour: string;
+
+    function handleOnDragOver(e: DragEvent) {
+        e.preventDefault()
+    }
+
+    function handleOnDrop(e: DragEvent) {
+        const pieceName = e.dataTransfer.getData("name")
+        Object.keys(Pieces).forEach((piece) => {
+            if (Pieces[piece].props.name === pieceName) {
+                setOccupyingPiece(Pieces[piece])
+            }
+        })
+    }
 
     if (colourFromPosition(props.position)) {
         squareColour = "SaddleBrown"
@@ -46,5 +62,11 @@ export default function Square(props: Props): JSX.Element {
         "width": squareDimensions
     }
 
-    return <div style={squareStyle}>{props.piece}</div>
+    return <div
+        style={squareStyle}
+        onDragOver={(e) => handleOnDragOver(e)}
+        onDrop={(e) => handleOnDrop(e)}
+    >
+        {occupyingPiece}
+    </div>
 }

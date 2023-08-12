@@ -1,12 +1,10 @@
 import React from "react";
 import Square from "./Square";
-import { StartingBoardConfig } from "../common/configs/boardConfig";
 
 
 export default function Board(): JSX.Element {
 
     const boardDimension: number = 8;
-    let currentBoardConfig = StartingBoardConfig;
     let position: string = "";
     let board: Array<Array<JSX.Element>> = [];
     let boardRank: Array<JSX.Element> = [];
@@ -19,8 +17,7 @@ export default function Board(): JSX.Element {
             // Generate a string for the given position based on the unicode value
             // of the file and the rank number
             position = String.fromCharCode(97 + file) + (rank).toString();
-            // Find if a piece occupies this square based on the board configuration
-            boardRank.push(<Square position={position} piece={currentBoardConfig[position]} />)
+            boardRank.push(<Square position={position} />)
         }
         board.push(boardRank);
     }
