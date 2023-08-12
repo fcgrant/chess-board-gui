@@ -5,10 +5,8 @@ import { Pieces } from "./Piece"
 interface Props {
     position: string
 }
-// Function to indicate the colour of the square given its position string. True
-// is returned for black/dark squares, and false is returned for white/light
-// squares
-function colourFromPosition(position: string): boolean {
+// Function to return the colour of the square given its position string
+function colourFromPosition(position: string): string {
     const positionRegex = "^[a-h][1-8]$"
     // Split position string into rank and file
     if (position.length !== 2) {
@@ -23,19 +21,20 @@ function colourFromPosition(position: string): boolean {
     const file = position[0].charCodeAt(0) - 96
     const rank = parseInt(position[1])
 
-    // A position is white/light if the file is odd and the rank is even, or the
-    // file is even and the rank is odd
     if ((file + rank) % 2 === 0) {
-        return true
+        return "SaddleBrown"
     }
-    return false
+    return "BlanchedAlmond"
 }
 
 export default function Square(props: Props): JSX.Element {
     let currentBoardConfig = StartingBoardConfig
     const [occupyingPiece, setOccupyingPiece] = useState(currentBoardConfig[props.position])
-    const squareDimensions: number = 100;
-    let squareColour: string;
+    const squareStyle = {
+        "backgroundColor": colourFromPosition(props.position),
+        "height": 100,
+        "width": 100
+    }
 
     function handleOnDragOver(e: DragEvent) {
         e.preventDefault()
@@ -48,18 +47,6 @@ export default function Square(props: Props): JSX.Element {
                 setOccupyingPiece(Pieces[piece])
             }
         })
-    }
-
-    if (colourFromPosition(props.position)) {
-        squareColour = "SaddleBrown"
-    } else {
-        squareColour = "BlanchedAlmond"
-    }
-
-    const squareStyle = {
-        "backgroundColor": squareColour,
-        "height": squareDimensions,
-        "width": squareDimensions
     }
 
     return <div
