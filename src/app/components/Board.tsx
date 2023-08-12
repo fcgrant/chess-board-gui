@@ -5,7 +5,6 @@ import Square from "./Square";
 export default function Board(): JSX.Element {
 
     const boardDimension: number = 8;
-    let position: string = "";
     let board: Array<Array<JSX.Element>> = [];
     let boardRank: Array<JSX.Element> = [];
 
@@ -16,7 +15,7 @@ export default function Board(): JSX.Element {
         for (let file = 0; file < boardDimension; file++) {
             // Generate a string for the given position based on the unicode value
             // of the file and the rank number
-            position = String.fromCharCode(97 + file) + (rank).toString();
+            let position = String.fromCharCode(97 + file) + (rank).toString();
             boardRank.push(<Square position={position} />)
         }
         board.push(boardRank);
