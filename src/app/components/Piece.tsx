@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 type Props = {
     name: string,
     imagePath: string,
@@ -7,10 +6,7 @@ type Props = {
 }
 
 function Piece(props: Props): JSX.Element {
-
     const pieceDimension: number = 100;
-    const pieceValue: number = props.value;
-
 
     return (
         <Image

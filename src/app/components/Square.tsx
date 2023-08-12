@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 
 interface Props {
     piece?: JSX.Element,
@@ -8,7 +8,6 @@ interface Props {
 // is returned for black/dark squares, and false is returned for white/light
 // squares
 function colourFromPosition(position: string): boolean {
-
     const positionRegex = "^[a-h][1-8]$"
     // Split position string into rank and file
     if (position.length !== 2) {
@@ -32,7 +31,7 @@ function colourFromPosition(position: string): boolean {
 }
 
 export default function Square(props: Props): JSX.Element {
-
+    const [currentPiece, setCurrentPiece] = useState(props.piece)
     const squareDimensions: number = 100;
     let squareColour: string;
 
@@ -48,5 +47,5 @@ export default function Square(props: Props): JSX.Element {
         "width": squareDimensions
     }
 
-    return <div style={squareStyle}>{props.piece}</div>
+    return <div style={squareStyle}>{currentPiece}</div>
 }
