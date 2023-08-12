@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 
 interface Props {
     piece?: JSX.Element,
@@ -31,7 +31,6 @@ function colourFromPosition(position: string): boolean {
 }
 
 export default function Square(props: Props): JSX.Element {
-    const [currentPiece, setCurrentPiece] = useState(props.piece)
     const squareDimensions: number = 100;
     let squareColour: string;
 
@@ -47,5 +46,5 @@ export default function Square(props: Props): JSX.Element {
         "width": squareDimensions
     }
 
-    return <div style={squareStyle}>{currentPiece}</div>
+    return <div style={squareStyle}>{props.piece}</div>
 }
