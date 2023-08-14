@@ -50,7 +50,6 @@ export default function Square(props: Props): JSX.Element {
         const previousPosition = e.dataTransfer.getData("position")
 
         props.updateBoardConfig(pieceName, pieceImage, previousPosition, props.position)
-
     }
 
     if (pieceDetails) {

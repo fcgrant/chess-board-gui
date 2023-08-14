@@ -9,6 +9,7 @@ type Props = {
 export default function Piece(props: Props): JSX.Element {
     const pieceDimension: number = 100;
 
+    // Prepare data for moving pieces
     function handleOnDragStart(e: DragEvent) {
         e.dataTransfer.setData("name", props.name)
         e.dataTransfer.setData("imagePath", props.imagePath)
