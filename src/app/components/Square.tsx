@@ -1,10 +1,13 @@
-import React, { DragEvent, useState } from "react"
-import { StartingBoardConfig } from "../common/configs/boardConfig"
-import { Pieces } from "./Piece"
+import React, { DragEvent } from "react"
+import Piece from "./Piece"
+import { newBoardConfig } from "../common/configs/boardConfig"
 
 interface Props {
-    position: string
+    position: string,
+    currentBoardConfig: newBoardConfig,
+    updateBoardConfig: Function,
 }
+
 // Function to return the colour of the square given its position string
 function colourFromPosition(position: string): string {
     const positionRegex = "^[a-h][1-8]$"
@@ -28,8 +31,9 @@ function colourFromPosition(position: string): string {
 }
 
 export default function Square(props: Props): JSX.Element {
-    let currentBoardConfig = StartingBoardConfig
-    const [occupyingPiece, setOccupyingPiece] = useState(currentBoardConfig[props.position])
+
+    let occupyingPiece: JSX.Element | undefined
+    const pieceDetails: Array<string> | undefined = props.currentBoardConfig[props.position]
     const squareStyle = {
         "backgroundColor": colourFromPosition(props.position),
         "height": 100,
@@ -42,18 +46,33 @@ export default function Square(props: Props): JSX.Element {
 
     function handleOnDrop(e: DragEvent) {
         const pieceName = e.dataTransfer.getData("name")
-        Object.keys(Pieces).forEach((piece) => {
-            if (Pieces[piece].props.name === pieceName) {
-                setOccupyingPiece(Pieces[piece])
-            }
-        })
+        const pieceImage = e.dataTransfer.getData("imagePath")
+        const previousPosition = e.dataTransfer.getData("position")
+
+        props.updateBoardConfig(pieceName, pieceImage, previousPosition, props.position)
+
     }
 
-    return <div
-        style={squareStyle}
-        onDragOver={(e) => handleOnDragOver(e)}
-        onDrop={(e) => handleOnDrop(e)}
-    >
-        {occupyingPiece}
-    </div>
+    if (pieceDetails) {
+        occupyingPiece =
+            <Piece
+                name={pieceDetails[0]}
+                imagePath={pieceDetails[1]}
+                position={props.position}
+            />
+    } else {
+        occupyingPiece = undefined
+    }
+
+    return (
+        <>
+            <div
+                style={squareStyle}
+                onDragOver={(e) => handleOnDragOver(e)}
+                onDrop={(e) => handleOnDrop(e)}
+            >
+                {occupyingPiece}
+            </div>
+        </>
+    )
 }

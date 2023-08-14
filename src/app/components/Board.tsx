@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Square from "./Square";
-
+import StartingBoardConfig from "../common/configs/boardConfig";
 
 export default function Board(): JSX.Element {
-
+    const [currentBoardConfig, setCurrentBoardConfig] = useState(StartingBoardConfig)
     const boardDimension: number = 8;
     let board: Array<Array<JSX.Element>> = [];
     let boardRank: Array<JSX.Element> = [];
+
+    function updateBoardConfig(pieceName: string, pieceImage: string, previousPosition: string, currentPosition: string) {
+        let tempBoardConfig = currentBoardConfig
+        delete tempBoardConfig[previousPosition]
+        tempBoardConfig[currentPosition] = [pieceName, pieceImage]
+        setCurrentBoardConfig({ ...tempBoardConfig })
+    }
 
     // Generate array of squares for the board and determine their positions and
     // if a piece occupies them
@@ -16,7 +23,13 @@ export default function Board(): JSX.Element {
             // Generate a string for the given position based on the unicode value
             // of the file and the rank number
             let position = String.fromCharCode(97 + file) + (rank).toString();
-            boardRank.push(<Square position={position} />)
+            boardRank.push(
+                <Square
+                    position={position}
+                    currentBoardConfig={currentBoardConfig}
+                    updateBoardConfig={updateBoardConfig}
+                />
+            )
         }
         board.push(boardRank);
     }
