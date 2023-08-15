@@ -5,26 +5,22 @@ import StartingBoardConfig, { newBoardConfig } from "./configs/boardConfig"
 export default function ValidateMove(piece: string, previousPosition: string, currentPosition: string): boolean {
 
     const [movePath, moveDirection, moveDistance] = calculateMoveType(previousPosition, currentPosition)
-    console.log("Piece " + piece)
-    console.log("Move Path " + movePath)
-    console.log("Move Direction " + moveDirection)
-    console.log("Move Distance " + moveDistance)
+    const pieceColour = piece.split(" ")[0]
+    const pieceName = piece.split(" ")[1]
     // Use match case for determining rules for different pieces
-    switch (piece) {
-        case "White Pawn" || "Black Pawn":
+    switch (pieceName) {
+        case "Pawn":
             // Pawns: 
             // 1) May move one or two spaces if it is their first move
-            if (moveDistance !== 1 && !StartingBoardConfig[previousPosition]) {
+            if (!(moveDistance === 2 || moveDistance === 1) && StartingBoardConfig[previousPosition]) {
                 return false
             }
-            if (moveDistance === 2 && !StartingBoardConfig[previousPosition]) {
-                return false
-            } else if (moveDistance !== 1) {
+            if (moveDistance !== 1 && !StartingBoardConfig[previousPosition]) {
                 return false
             }
             // 2) If it is not the first move, a pawn may only move 1 square towards
             // the opponents last rank, they cannot move backwards.
-            if (!(moveDirection === 0 || moveDirection === 1)) {
+            if (!(moveDirection === 0)) {
                 return false
             }
             // 2) Pawns may move diagonally if a square diagonally up from them is 
@@ -33,33 +29,45 @@ export default function ValidateMove(piece: string, previousPosition: string, cu
             // reaching the opponents final rank.
             // occupied by an opponents piece. 
             break;
-        case "White Knight" || "Black Knight":
+        case "Knight":
             // Knights:
             // 1) May only move in an L shape from their previous square, two squares up/down
             // and 1 square along and vice versa
             if (movePath !== 2) {
-                console.log("Invalid " + piece + "move")
                 return false
             }
             break;
-        case "White Bishop" || "Black Bishop":
+        case "Bishop":
             // Bishops:
-            // 1) May move for any number of squares diagonally, as long as the path is not obstructed
+            // 1) May move for any number of squares diagonally
             if (movePath !== 1) {
-                console.log("Invalid " + piece + "move")
                 return false
             }
             break;
-        case "White Rook" || "Black Rook":
-        // Rooks:
-        // 1) May move for any number of squares along, up or down, as long as the path is not obstructed
-        case "White Queen" || "Black Queen":
-        // Queens:
-        // 1) May move for any number of squares diagonally, as long as the path is not obstructed
-        // 2) May move for any number of squares along, up or down, as long as the path is not obstructed
-        case "White King" || "Black King":
-        // Kings:
-        // 1) May move for only 1 square in any direction, as long as the path is not obstructed
+        case "Rook":
+            // Rooks:
+            // 1) May move for any number of squares left, right, up or down
+            if (movePath !== 0) {
+                return false
+            }
+            break;
+        case "Queen":
+            // Queens:
+            // 1) May move for any number of squares in a straight line
+            if (!(movePath === 0 || movePath === 1)) {
+                return false
+            }
+            break;
+        case "King":
+            // Kings:
+            // 1) May move for only 1 square in any direction
+            if (!(movePath === 0 || movePath === 1)) {
+                return false
+            }
+            if (moveDistance !== 1) {
+                return false
+            }
+            break;
     }
 
     // Is the current player in check?
