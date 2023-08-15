@@ -1,55 +1,66 @@
 import convertPositionToNumber from "./PositionConversions"
+import StartingBoardConfig, { newBoardConfig } from "./configs/boardConfig"
 
 // Function returns false if proposed move is illeagal, and true otherwise
 export default function ValidateMove(piece: string, previousPosition: string, currentPosition: string): boolean {
 
     const [movePath, moveDirection, moveDistance] = calculateMoveType(previousPosition, currentPosition)
-    console.log("Move Path: " + movePath)
-    console.log("Move Direction" + moveDirection)
+    console.log("Piece " + piece)
+    console.log("Move Path " + movePath)
+    console.log("Move Direction " + moveDirection)
     console.log("Move Distance " + moveDistance)
     // Use match case for determining rules for different pieces
     switch (piece) {
         case "White Pawn" || "Black Pawn":
-        // 1) May move two spaces if it is their first move, if not they may
-        // only move 1 square towards the opponents last rank, they cannot move backwards. 
-
-        // 2) Pawns may move diagonally if a square diagonally up from them is 
-        // occupied by an opponents piece. 
+            // Pawns: 
+            // 1) May move one or two spaces if it is their first move
+            if (moveDistance !== 1 && !StartingBoardConfig[previousPosition]) {
+                return false
+            }
+            if (moveDistance === 2 && !StartingBoardConfig[previousPosition]) {
+                return false
+            } else if (moveDistance !== 1) {
+                return false
+            }
+            // 2) If it is not the first move, a pawn may only move 1 square towards
+            // the opponents last rank, they cannot move backwards.
+            if (!(moveDirection === 0 || moveDirection === 1)) {
+                return false
+            }
+            // 2) Pawns may move diagonally if a square diagonally up from them is 
+            // occupied by an opponents piece. 
+            // 3) Pawns must become either a bishop, knight, rook, or queen upon 
+            // reaching the opponents final rank.
+            // occupied by an opponents piece. 
+            break;
         case "White Knight" || "Black Knight":
-
+            // Knights:
+            // 1) May only move in an L shape from their previous square, two squares up/down
+            // and 1 square along and vice versa
+            if (movePath !== 2) {
+                console.log("Invalid " + piece + "move")
+                return false
+            }
+            break;
         case "White Bishop" || "Black Bishop":
-
+            // Bishops:
+            // 1) May move for any number of squares diagonally, as long as the path is not obstructed
+            if (movePath !== 1) {
+                console.log("Invalid " + piece + "move")
+                return false
+            }
+            break;
         case "White Rook" || "Black Rook":
-
+        // Rooks:
+        // 1) May move for any number of squares along, up or down, as long as the path is not obstructed
         case "White Queen" || "Black Queen":
-
+        // Queens:
+        // 1) May move for any number of squares diagonally, as long as the path is not obstructed
+        // 2) May move for any number of squares along, up or down, as long as the path is not obstructed
         case "White King" || "Black King":
-
+        // Kings:
+        // 1) May move for only 1 square in any direction, as long as the path is not obstructed
     }
-    // Pawns: 
-    // 1) May move two spaces if it is their first move, if not they may
-    // only move 1 square towards the opponents last rank, they cannot move backwards. 
-    // 2) Pawns may move diagonally if a square diagonally up from them is 
-    // occupied by an opponents piece. 
-    // 3) Pawns must become either a bishop, knight, rook, or queen upon 
-    // reaching the opponents final rank.
-
-    // Knights:
-    // 1) May only move in an L shape from their previous square, two squares up/down
-    // and 1 square along and vice versa
-
-    // Bishops:
-    // 1) May move for any number of squares diagonally, as long as the path is not obstructed
-
-    // Rooks:
-    // 1) May move for any number of squares along, up or down, as long as the path is not obstructed
-
-    // Queens:
-    // 1) May move for any number of squares diagonally, as long as the path is not obstructed
-    // 2) May move for any number of squares along, up or down, as long as the path is not obstructed
-
-    // Kings:
-    // 1) May move for only 1 square in any direction, as long as the path is not obstructed
 
     // Is the current player in check?
     // Can the current player block/take the checking piece with the proposed move?
@@ -72,7 +83,7 @@ export default function ValidateMove(piece: string, previousPosition: string, cu
 
     // Extra rule logic for 50 move limit, move repetitions, stalemate, insufficient material
 
-    return false
+    return true
 }
 
 // Function returns an array describing the path and direction of the move and the 
@@ -83,7 +94,7 @@ export default function ValidateMove(piece: string, previousPosition: string, cu
 // For diagonal moves it is 0 for up right, 1 for down right, 2 for down left
 // and 3 for up left
 // array[2]: The move distance, the number of squares traversed by the move
-function calculateMoveType(previousPosition: string, currentPosition: string) {
+function calculateMoveType(previousPosition: string, currentPosition: string): Array<number> {
 
     // Convert each of the ranks and files into their numeric representation
     const [previousFile, previousRank] = convertPositionToNumber(previousPosition[0], previousPosition[1])
@@ -166,5 +177,9 @@ function calculateMoveType(previousPosition: string, currentPosition: string) {
 }
 
 function isPathObstructed(moveType: number, previousPosition: string, moveLength: number) {
+
+}
+
+function isSquareOccupied(boardConfig: newBoardConfig, position: string, playerColour: number) {
 
 }

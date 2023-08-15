@@ -29,9 +29,9 @@ export default function Square(props: Props): JSX.Element {
         const pieceImage = e.dataTransfer.getData("imagePath")
         const previousPosition = e.dataTransfer.getData("position")
 
-        props.updateBoardConfig(pieceName, pieceImage, previousPosition, props.position)
-        ValidateMove(pieceName, previousPosition, props.position)
-
+        if (ValidateMove(pieceName, previousPosition, props.position)) {
+            props.updateBoardConfig(pieceName, pieceImage, previousPosition, props.position)
+        }
     }
 
     if (pieceDetails) {
