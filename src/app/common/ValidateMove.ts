@@ -1,29 +1,45 @@
+import { basename } from "path"
 import convertPositionToNumber from "./PositionConversions"
 import StartingBoardConfig, { newBoardConfig } from "./configs/boardConfig"
 
 // Function returns false if proposed move is illeagal, and true otherwise
-export default function ValidateMove(piece: string, previousPosition: string, currentPosition: string): boolean {
+export default function ValidateMove(piece: string,
+    previousPosition: string,
+    currentPosition: string,
+    currentBoardConfig: newBoardConfig): boolean {
 
     const [movePath, moveDirection, moveDistance] = calculateMoveType(previousPosition, currentPosition)
-    const pieceColour = piece.split(" ")[0]
-    const pieceName = piece.split(" ")[1]
-    // Use match case for determining rules for different pieces
+    const [pieceColour, pieceName] = piece.split(" ")
+
     switch (pieceName) {
         case "Pawn":
-            // Pawns: 
-            // 1) May move one or two spaces if it is their first move
-            if (!(moveDistance === 2 || moveDistance === 1) && StartingBoardConfig[previousPosition]) {
+            // If a pawn is moving from it's starting square it may move 1 or 2
+            // squares, but can only move 1 square if it is not in its starting
+            // square
+            console.log(StartingBoardConfig)
+            if (StartingBoardConfig[previousPosition] &&
+                StartingBoardConfig[previousPosition][0] === piece &&
+                !(moveDistance === 1 || moveDistance === 2)) {
                 return false
             }
-            if (moveDistance !== 1 && !StartingBoardConfig[previousPosition]) {
+            // A pawn can only move diagonally if the square it is moving to is 
+            // occupied by an opponents piece
+            if (movePath === 1 && isSquareOccupied(currentBoardConfig, currentPosition, pieceColour) !== 1) {
                 return false
+            }
+
+            switch (pieceColour) {
+                case "White":
+
+                    break;
+                case "Black":
+                    break;
             }
             // 2) If it is not the first move, a pawn may only move 1 square towards
             // the opponents last rank, they cannot move backwards.
-            if (!(moveDirection === 0)) {
-                return false
-            }
-            // 2) Pawns may move diagonally if a square diagonally up from them is 
+            // 3) Pawns may move diagonally if a square diagonally up from them is 
+            // occupied by an opponents piece. 
+            // 3) Pawns may move diagonally if a square diagonally up from them is 
             // occupied by an opponents piece. 
             // 3) Pawns must become either a bishop, knight, rook, or queen upon 
             // reaching the opponents final rank.
@@ -77,6 +93,9 @@ export default function ValidateMove(piece: string, previousPosition: string, cu
 
     // Does the proposed move land on a square already occupied by one of the
     // current players pieces?
+    if (isSquareOccupied(currentBoardConfig, currentPosition, pieceColour) === 2) {
+        return false
+    }
 
     // For castling, has the king or the rook on the side of the proposed castle moved?
     // Would the current player be castling out of or into check?
@@ -188,6 +207,18 @@ function isPathObstructed(moveType: number, previousPosition: string, moveLength
 
 }
 
-function isSquareOccupied(boardConfig: newBoardConfig, position: string, playerColour: number) {
-
+// Function to indicate whether the given square is occupied by one of the current 
+// players pieces or an opponents piece or is unoccupied unoccupied
+// 0: Unoccupied
+// 1: Occupied by opponent
+// 2: Occupied by current player
+function isSquareOccupied(boardConfig: newBoardConfig, currentPosition: string, playerColour: string) {
+    if (boardConfig[currentPosition]) {
+        if (boardConfig[currentPosition][0].includes(playerColour)) {
+            return 2
+        }
+        return 1
+    } else {
+        return 0
+    }
 }
