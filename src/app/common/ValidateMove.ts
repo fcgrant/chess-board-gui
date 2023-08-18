@@ -1,4 +1,3 @@
-import { basename } from "path"
 import convertPositionToNumber from "./PositionConversions"
 import StartingBoardConfig, { newBoardConfig } from "./configs/boardConfig"
 
@@ -10,40 +9,57 @@ export default function ValidateMove(piece: string,
 
     const [movePath, moveDirection, moveDistance] = calculateMoveType(previousPosition, currentPosition)
     const [pieceColour, pieceName] = piece.split(" ")
+    const pieceMoved = !(StartingBoardConfig[previousPosition] &&
+        StartingBoardConfig[previousPosition][0] === piece)
 
     switch (pieceName) {
         case "Pawn":
             // If a pawn is moving from it's starting square it may move 1 or 2
-            // squares, but can only move 1 square if it is not in its starting
-            // square
-            console.log(StartingBoardConfig)
-            if (StartingBoardConfig[previousPosition] &&
-                StartingBoardConfig[previousPosition][0] === piece &&
-                !(moveDistance === 1 || moveDistance === 2)) {
+            // squares up
+            if (!pieceMoved && !(moveDistance === 1 || moveDistance === 2)) {
                 return false
             }
-            // A pawn can only move diagonally if the square it is moving to is 
-            // occupied by an opponents piece
+            // If a pawn has already moved, it can only move 1 square
+            if (pieceMoved && moveDistance !== 1) {
+                return false
+            }
+            // A pawn can only move diagonally one square and only if the square 
+            // it is moving to is occupied by an opponents piece
             if (movePath === 1 && isSquareOccupied(currentBoardConfig, currentPosition, pieceColour) !== 1) {
                 return false
             }
+            if (movePath === 1 && moveDistance !== 1) {
+                return false
+            }
+            // A pawn cannot move forward if it is in front of an opponents pawn
+            if (movePath === 0 && isSquareOccupied(currentBoardConfig, currentPosition, pieceColour) !== 0) {
+                return false
+            }
 
+            // White and black pawns move in opposite directions, so their 
+            // directional logic must be seperated
             switch (pieceColour) {
                 case "White":
+                    if (movePath === 0 && moveDirection !== 0) {
+                        return false
+                    }
 
+                    if (movePath === 1 && !(moveDirection === 3 || moveDirection === 0)) {
+                        return false
+                    }
                     break;
                 case "Black":
+                    if (movePath === 0 && moveDirection !== 2) {
+                        return false
+                    }
+
+                    if ((movePath === 1) && !(moveDirection === 1 || moveDirection === 2)) {
+                        return false
+                    }
                     break;
             }
-            // 2) If it is not the first move, a pawn may only move 1 square towards
-            // the opponents last rank, they cannot move backwards.
-            // 3) Pawns may move diagonally if a square diagonally up from them is 
-            // occupied by an opponents piece. 
-            // 3) Pawns may move diagonally if a square diagonally up from them is 
-            // occupied by an opponents piece. 
             // 3) Pawns must become either a bishop, knight, rook, or queen upon 
-            // reaching the opponents final rank.
-            // occupied by an opponents piece. 
+            // reaching the opponents final rank. 
             break;
         case "Knight":
             // Knights:
