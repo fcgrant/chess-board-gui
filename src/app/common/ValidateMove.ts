@@ -1,4 +1,4 @@
-import convertPositionToNumber from "./PositionConversions"
+import convertPositionToNumber, { convertPositionToString } from "./PositionConversions"
 import StartingBoardConfig, { newBoardConfig } from "./configs/boardConfig"
 
 // Function returns false if proposed move is illeagal, and true otherwise
@@ -7,7 +7,11 @@ export default function ValidateMove(piece: string,
     currentPosition: string,
     currentBoardConfig: newBoardConfig): boolean {
 
-    const [movePath, moveDirection, moveDistance] = calculateMoveType(previousPosition, currentPosition)
+    const [movePath,
+        moveDirection,
+        moveDistance,
+        fileOffset,
+        rankOffset] = calculateMoveType(previousPosition, currentPosition)
     const [pieceColour, pieceName] = piece.split(" ")
     const pieceMoved = !(StartingBoardConfig[previousPosition] &&
         StartingBoardConfig[previousPosition][0] === piece)
@@ -105,6 +109,8 @@ export default function ValidateMove(piece: string,
     // Is the current player in check?
     // Can the current player block/take the checking piece with the proposed move?
 
+    // Is the piece pinned to the king?
+
     // Is it your turn to play?
 
     // Does the proposed move land on a square already occupied by one of the
@@ -120,8 +126,12 @@ export default function ValidateMove(piece: string,
     // For en passent, was the last move played by the opponent one where en passent is possible?
     // Is your pawn in the correct position for en passent
 
-    // Is an opponents piece blocking the path of this move? 
+    // Is a piece blocking the path of this move? 
     // (unless the proposed piece to move is a knight)
+    if (pieceName !== "Knight" && isPathObstructed(previousPosition, fileOffset,
+        rankOffset, moveDistance, pieceColour, currentBoardConfig)) {
+        return false
+    }
 
 
     // Extra rule logic for 50 move limit, move repetitions, stalemate, insufficient material
@@ -137,15 +147,21 @@ export default function ValidateMove(piece: string,
 // For diagonal moves it is 0 for up right, 1 for down right, 2 for down left
 // and 3 for up left
 // array[2]: The move distance, the number of squares traversed by the move
+// array[3]: The number to add to the file to obtain the next square in the moves
+// path
+// array[4]: The number to add to the rank to obtain the next square in the moves
+// path
 function calculateMoveType(previousPosition: string, currentPosition: string): Array<number> {
 
     // Convert each of the ranks and files into their numeric representation
-    const [previousFile, previousRank] = convertPositionToNumber(previousPosition[0], previousPosition[1])
-    const [currentFile, currentRank] = convertPositionToNumber(currentPosition[0], currentPosition[1])
+    const [previousFile, previousRank] = convertPositionToNumber(previousPosition)
+    const [currentFile, currentRank] = convertPositionToNumber(currentPosition)
 
     let movePath: number;
     let moveDirection: number;
     let moveDistance: number;
+    let fileOffset: number;
+    let rankOffset: number;
 
     // Check for straight up or down
     if (previousFile === currentFile && previousRank !== currentRank) {
@@ -155,12 +171,18 @@ function calculateMoveType(previousPosition: string, currentPosition: string): A
             // If the files are the same, but the previous rank is greater than
             // the current rank, the path is straight down
             moveDirection = 2
+
+            fileOffset = 0
+            rankOffset = -1
         } else {
             // If the files are the same, but the current rank is greater than
             // the previous rank, the path is straight up
             moveDirection = 0
+
+            fileOffset = 0
+            rankOffset = 1
         }
-        return [movePath, moveDirection, moveDistance]
+        return [movePath, moveDirection, moveDistance, fileOffset, rankOffset]
     }
 
     // Check for straight left or right
@@ -171,12 +193,18 @@ function calculateMoveType(previousPosition: string, currentPosition: string): A
             // If the ranks are the same, but the previous file is greater than
             // the current file, the path is straight left
             moveDirection = 3
+
+            fileOffset = -1
+            rankOffset = 0
         } else {
             // If the ranks are the same, but the current file is greater than
             // the previous file, the path is straight left
             moveDirection = 1
+
+            fileOffset = 1
+            rankOffset = 0
         }
-        return [movePath, moveDirection, moveDistance]
+        return [movePath, moveDirection, moveDistance, fileOffset, rankOffset]
     }
 
     // For diagonal lines, the difference between the current file and the
@@ -187,17 +215,29 @@ function calculateMoveType(previousPosition: string, currentPosition: string): A
         if (currentFile > previousFile && currentRank > previousRank) {
             // Up right
             moveDirection = 0
+
+            fileOffset = 1
+            rankOffset = 1
         } else if (currentFile > previousFile && currentRank < previousRank) {
             // Down right
             moveDirection = 1
+
+            fileOffset = 1
+            rankOffset = -1
         } else if (currentFile < previousFile && currentRank < previousRank) {
             // Down left
             moveDirection = 2
+
+            fileOffset = -1
+            rankOffset = -1
         } else {
             // Up left
             moveDirection = 3
+
+            fileOffset = -1
+            rankOffset = 1
         }
-        return [movePath, moveDirection, moveDistance]
+        return [movePath, moveDirection, moveDistance, fileOffset, rankOffset]
     }
 
     // For L shaped moves, neither the distance nor direction matters, as only a
@@ -211,16 +251,38 @@ function calculateMoveType(previousPosition: string, currentPosition: string): A
         // to avoid any confusion with them being interpreted
         moveDirection = -1
         moveDistance = -1
-        return [movePath, moveDirection, moveDistance]
+
+        // Offsets are not necessary for knights, as they can move even if their
+        // path to an open square is obstructed
+        fileOffset = 0
+        rankOffset = 0
+        return [movePath, moveDirection, moveDistance, fileOffset, rankOffset]
     }
 
     // If a move type has not already been returned, then this move is not legal,
     // so return -1 for each variable to indicate the illegal move
-    return [-1, -1, -1]
+    return [-1, -1, -1, -1, -1]
 }
-
-function isPathObstructed(moveType: number, previousPosition: string, moveLength: number) {
-
+// Function to determine if the path of a given move is obstructed by any occupied
+// square, assuming that move is legal.
+function isPathObstructed(previousPosition: string,
+    fileOffset: number,
+    rankOffset: number,
+    moveDistance: number,
+    pieceColour: string,
+    boardConfig: newBoardConfig): boolean {
+    let [previousFile,
+        previousRank] = convertPositionToNumber(previousPosition)
+    let nextPosition: string
+    for (let path = 0; path < moveDistance - 1; path++) {
+        previousFile += fileOffset
+        previousRank += rankOffset
+        nextPosition = convertPositionToString(previousFile, previousRank)
+        if (isSquareOccupied(boardConfig, nextPosition, pieceColour) !== 0) {
+            return true
+        }
+    }
+    return false
 }
 
 // Function to indicate whether the given square is occupied by one of the current 
