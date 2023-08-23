@@ -1,9 +1,9 @@
 
-export type newBoardConfig = {
+export type BoardConfig = {
     [index: string]: Array<string>
 }
 
-const StartingBoardConfig: newBoardConfig = {
+const StartingBoardConfig: BoardConfig = {
     "d1": ["White Queen", "/white-queen.svg"],
     "e1": ["White King", "/white-king.svg"],
     "a1": ["White Rook", "/white-rook.svg"],

@@ -1,11 +1,11 @@
 import convertPositionToNumber, { convertPositionToString } from "./PositionConversions"
-import StartingBoardConfig, { newBoardConfig } from "./configs/boardConfig"
+import StartingBoardConfig, { BoardConfig } from "./configs/boardConfig"
 
 // Function returns false if proposed move is illeagal, and true otherwise
 export default function ValidateMove(piece: string,
     previousPosition: string,
     currentPosition: string,
-    currentBoardConfig: newBoardConfig): boolean {
+    currentBoardConfig: BoardConfig): boolean {
 
     const [movePath,
         moveDirection,
@@ -270,7 +270,7 @@ function isPathObstructed(previousPosition: string,
     rankOffset: number,
     moveDistance: number,
     pieceColour: string,
-    boardConfig: newBoardConfig): boolean {
+    boardConfig: BoardConfig): boolean {
     let [previousFile,
         previousRank] = convertPositionToNumber(previousPosition)
     let nextPosition: string
@@ -290,7 +290,7 @@ function isPathObstructed(previousPosition: string,
 // 0: Unoccupied
 // 1: Occupied by opponent
 // 2: Occupied by current player
-function isSquareOccupied(boardConfig: newBoardConfig, currentPosition: string, playerColour: string) {
+function isSquareOccupied(boardConfig: BoardConfig, currentPosition: string, playerColour: string) {
     if (boardConfig[currentPosition]) {
         if (boardConfig[currentPosition][0].includes(playerColour)) {
             return 2

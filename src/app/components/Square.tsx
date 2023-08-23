@@ -1,12 +1,12 @@
 import React, { DragEvent } from "react"
 import Piece from "./Piece"
-import { newBoardConfig } from "../common/configs/boardConfig"
+import { BoardConfig } from "../common/configs/boardConfig"
 import { colourFromPosition } from "../common/PositionConversions"
 import ValidateMove from "../common/ValidateMove"
 
 interface Props {
     position: string,
-    currentBoardConfig: newBoardConfig,
+    currentBoardConfig: BoardConfig,
     updateBoardConfig: Function,
 }
 
