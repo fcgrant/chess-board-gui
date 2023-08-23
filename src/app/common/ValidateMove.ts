@@ -29,8 +29,10 @@ export default function ValidateMove(piece: string,
                 return false
             }
             // A pawn can only move diagonally one square and only if the square 
-            // it is moving to is occupied by an opponents piece
-            if (movePath === 1 && isSquareOccupied(currentGameConfig.boardConfig, currentPosition, pieceColour) !== 1) {
+            // it is moving to is occupied by an opponents piece or that square
+            // allows en passant
+            if (movePath === 1 && isSquareOccupied(currentGameConfig.boardConfig, currentPosition, pieceColour) !== 1 &&
+                currentGameConfig.enPassant !== currentPosition) {
                 return false
             }
             if (movePath === 1 && moveDistance !== 1) {
