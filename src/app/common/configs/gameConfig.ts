@@ -2,7 +2,7 @@ import StartingBoardConfig, { BoardConfig } from "./boardConfig"
 
 // Object describing the current state of the game, where pieces are, castling
 // rights, en passant, ply and full moves
-type GameConfig = {
+export type GameConfig = {
     boardConfig: BoardConfig,
     activeColour: string,
     castlingRights: string,

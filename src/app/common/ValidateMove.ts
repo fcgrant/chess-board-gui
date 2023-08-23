@@ -1,11 +1,12 @@
 import convertPositionToNumber, { convertPositionToString } from "./PositionConversions"
-import StartingBoardConfig, { BoardConfig } from "./configs/boardConfig"
+import StartingGameConfig, { GameConfig } from "./configs/gameConfig"
+import { BoardConfig } from "./configs/boardConfig"
 
 // Function returns false if proposed move is illeagal, and true otherwise
 export default function ValidateMove(piece: string,
     previousPosition: string,
     currentPosition: string,
-    currentBoardConfig: BoardConfig): boolean {
+    currentGameConfig: GameConfig): boolean {
 
     const [movePath,
         moveDirection,
@@ -13,8 +14,8 @@ export default function ValidateMove(piece: string,
         fileOffset,
         rankOffset] = calculateMoveType(previousPosition, currentPosition)
     const [pieceColour, pieceName] = piece.split(" ")
-    const pieceMoved = !(StartingBoardConfig[previousPosition] &&
-        StartingBoardConfig[previousPosition][0] === piece)
+    const pieceMoved = !(StartingGameConfig.boardConfig[previousPosition] &&
+        StartingGameConfig.boardConfig[previousPosition][0] === piece)
 
     switch (pieceName) {
         case "Pawn":
@@ -29,14 +30,14 @@ export default function ValidateMove(piece: string,
             }
             // A pawn can only move diagonally one square and only if the square 
             // it is moving to is occupied by an opponents piece
-            if (movePath === 1 && isSquareOccupied(currentBoardConfig, currentPosition, pieceColour) !== 1) {
+            if (movePath === 1 && isSquareOccupied(currentGameConfig.boardConfig, currentPosition, pieceColour) !== 1) {
                 return false
             }
             if (movePath === 1 && moveDistance !== 1) {
                 return false
             }
             // A pawn cannot move forward if it is in front of an opponents pawn
-            if (movePath === 0 && isSquareOccupied(currentBoardConfig, currentPosition, pieceColour) !== 0) {
+            if (movePath === 0 && isSquareOccupied(currentGameConfig.boardConfig, currentPosition, pieceColour) !== 0) {
                 return false
             }
 
@@ -115,7 +116,7 @@ export default function ValidateMove(piece: string,
 
     // Does the proposed move land on a square already occupied by one of the
     // current players pieces?
-    if (isSquareOccupied(currentBoardConfig, currentPosition, pieceColour) === 2) {
+    if (isSquareOccupied(currentGameConfig.boardConfig, currentPosition, pieceColour) === 2) {
         return false
     }
 
@@ -129,7 +130,7 @@ export default function ValidateMove(piece: string,
     // Is a piece blocking the path of this move? 
     // (unless the proposed piece to move is a knight)
     if (pieceName !== "Knight" && isPathObstructed(previousPosition, fileOffset,
-        rankOffset, moveDistance, pieceColour, currentBoardConfig)) {
+        rankOffset, moveDistance, pieceColour, currentGameConfig.boardConfig)) {
         return false
     }
 

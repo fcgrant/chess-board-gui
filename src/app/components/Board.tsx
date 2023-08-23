@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import Square from "./Square";
-import StartingBoardConfig from "../common/configs/boardConfig";
+import StartingGameConfig from "../common/configs/gameConfig";
 
 export default function Board(): JSX.Element {
-    const [currentBoardConfig, setCurrentBoardConfig] = useState(StartingBoardConfig)
+    const [currentGameConfig, setCurrentGameConfig] = useState(StartingGameConfig)
     const boardDimension: number = 8;
     let board: Array<Array<JSX.Element>> = [];
     let boardRank: Array<JSX.Element> = [];
 
-    function updateBoardConfig(pieceName: string, pieceImage: string, previousPosition: string, currentPosition: string) {
-        let tempBoardConfig = currentBoardConfig
-        delete tempBoardConfig[previousPosition]
-        tempBoardConfig[currentPosition] = [pieceName, pieceImage]
-        setCurrentBoardConfig({ ...tempBoardConfig })
+    function updateGameConfig(pieceName: string, pieceImage: string, previousPosition: string, currentPosition: string) {
+        let tempGameConfig = currentGameConfig
+        delete tempGameConfig.boardConfig[previousPosition]
+        tempGameConfig.boardConfig[currentPosition] = [pieceName, pieceImage]
+        setCurrentGameConfig({ ...tempGameConfig })
     }
 
     // Generate array of squares for the board and determine their positions and
@@ -26,8 +26,8 @@ export default function Board(): JSX.Element {
             boardRank.push(
                 <Square
                     position={position}
-                    currentBoardConfig={currentBoardConfig}
-                    updateBoardConfig={updateBoardConfig}
+                    currentGameConfig={currentGameConfig}
+                    updateBoardConfig={updateGameConfig}
                 />
             )
         }

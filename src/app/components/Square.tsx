@@ -1,19 +1,19 @@
 import React, { DragEvent } from "react"
 import Piece from "./Piece"
-import { BoardConfig } from "../common/configs/boardConfig"
+import { GameConfig } from "../common/configs/gameConfig"
 import { colourFromPosition } from "../common/PositionConversions"
 import ValidateMove from "../common/ValidateMove"
 
 interface Props {
     position: string,
-    currentBoardConfig: BoardConfig,
+    currentGameConfig: GameConfig,
     updateBoardConfig: Function,
 }
 
 export default function Square(props: Props): JSX.Element {
 
     let occupyingPiece: JSX.Element | undefined
-    const pieceDetails: Array<string> | undefined = props.currentBoardConfig[props.position]
+    const pieceDetails: Array<string> | undefined = props.currentGameConfig.boardConfig[props.position]
     const squareStyle = {
         "backgroundColor": colourFromPosition(props.position),
         "height": 100,
@@ -29,7 +29,7 @@ export default function Square(props: Props): JSX.Element {
         const pieceImage = e.dataTransfer.getData("imagePath")
         const previousPosition = e.dataTransfer.getData("position")
 
-        if (ValidateMove(pieceName, previousPosition, props.position, props.currentBoardConfig)) {
+        if (ValidateMove(pieceName, previousPosition, props.position, props.currentGameConfig)) {
             props.updateBoardConfig(pieceName, pieceImage, previousPosition, props.position)
         }
     }
