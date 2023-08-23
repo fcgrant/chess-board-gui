@@ -113,6 +113,9 @@ export default function ValidateMove(piece: string,
     // Is the piece pinned to the king?
 
     // Is it your turn to play?
+    if (currentGameConfig.activeColour !== pieceColour) {
+        return false
+    }
 
     // Does the proposed move land on a square already occupied by one of the
     // current players pieces?
@@ -133,7 +136,6 @@ export default function ValidateMove(piece: string,
         rankOffset, moveDistance, pieceColour, currentGameConfig.boardConfig)) {
         return false
     }
-
 
     // Extra rule logic for 50 move limit, move repetitions, stalemate, insufficient material
 

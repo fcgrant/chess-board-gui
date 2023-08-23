@@ -9,9 +9,25 @@ export default function Board(): JSX.Element {
     let boardRank: Array<JSX.Element> = [];
 
     function updateGameConfig(pieceName: string, pieceImage: string, previousPosition: string, currentPosition: string) {
+        const [pieceColour, piece] = pieceName.split(" ")
         let tempGameConfig = currentGameConfig
+        // Update board config to reflect the new move
         delete tempGameConfig.boardConfig[previousPosition]
         tempGameConfig.boardConfig[currentPosition] = [pieceName, pieceImage]
+        // Update the half move counter
+        tempGameConfig.halfMove += 1
+        // Update the full move counter if the moved piece was black
+        if (pieceColour === "Black") {
+            tempGameConfig.fullMove += 1
+        }
+        // Change the active colour to the opposite of the piece just moved
+        tempGameConfig.activeColour === "White" ? tempGameConfig.activeColour = "Black" : tempGameConfig.activeColour = "White"
+        // Calculate if the move allows en passant
+
+        // Calculate if the move removes the right to castle
+
+
+
         setCurrentGameConfig({ ...tempGameConfig })
     }
 
@@ -45,4 +61,12 @@ export default function Board(): JSX.Element {
             })}
         </div>
     )
+}
+
+function allowsEnPassant(piece: string, previousPosition: string, currentPosition: string) {
+
+}
+
+function checkCastlingRights(piece: string, previousPosition: string, currentPosition: string) {
+
 }

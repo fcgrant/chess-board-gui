@@ -15,7 +15,7 @@ const StartingGameConfig: GameConfig = {
     boardConfig: StartingBoardConfig,
     activeColour: "White",
     castlingRights: "WQkq",
-    enPassant: "",
+    enPassant: "-",
     halfMove: 0,
     fullMove: 1
 }
